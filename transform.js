@@ -80,7 +80,7 @@ function transform (filename, options) {
       try {
         ast = transformAst(src, {
           parser: {
-            parser: function (src, opts) {
+            parse: function (src, opts) {
               acorn.parse(src, {
                 ecmaVersion: 9,
                 allowHashBang: true,
