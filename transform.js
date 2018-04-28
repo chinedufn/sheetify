@@ -8,6 +8,7 @@ const through = require('through2')
 const xtend = require('xtend')
 const path = require('path')
 const fs = require('fs')
+var acorn = require('acorn')
 
 const sheetify = require('./index')
 
@@ -78,7 +79,16 @@ function transform (filename, options) {
 
       try {
         ast = transformAst(src, {
-          parser: require('acorn-node'),
+          parser: {
+            parser: function (src, opts) {
+              acorn.parse(src, {
+                ecmaVersion: 9,
+                allowHashBang: true,
+                allowReturnOutsideFunction: true,
+                sourceType: 'module'
+              })
+            }
+          },
           inputFilename: path.basename(filename)
         }, identifyModuleName)
         ast.walk(extractNodes)
